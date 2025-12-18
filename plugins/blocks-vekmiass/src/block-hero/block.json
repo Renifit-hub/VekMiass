@@ -6,7 +6,7 @@
 	"title": "Hero Block",
 	"category": "widgets",
 	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Example block scaffolded with Create Block really tool.",
 	"example": {},
 	"supports": {
 		"html": false
