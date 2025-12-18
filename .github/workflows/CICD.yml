@@ -36,7 +36,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         source: "./wordpress.zip, ./wpcontent.zip"
-        target: ${{ github.event_name == 'push' && 'wordpress_6y9dw/public_html' || 'wordpress_4rgth/public_html' }}
+        target: ${{ github.event_name == 'push' && 'wordpress_6y9dw/public_html' || 'wordpress_4rgrh/public_html' }}
 
 
     - name: Enable Maintenance Mode
@@ -47,7 +47,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         source: ".maintenance"
-        target: ${{ github.event_name == 'push' && 'wordpress_6y9dw/public_html' || 'wordpress_4rgth/public_html' }}
+        target: ${{ github.event_name == 'push' && 'wordpress_6y9dw/public_html' || 'wordpress_4rgrh/public_html' }}
 
 
     - name: Update WordPress Core
@@ -58,7 +58,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgrh/public_html' }}
           find . -maxdepth 1 -type f -name "*.php" ! -name "wp-config.php" -delete
           rm -rf wp-admin wp-includes
           unzip -o wordpress.zip
@@ -75,7 +75,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgrh/public_html' }}
           rm -rf wp-content/plugins wp-content/mu-plugins wp-content/themes
           unzip -o wpcontent.zip -d wp-content/
           rm wpcontent.zip
@@ -89,5 +89,5 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgrh/public_html' }}
           rm -f .maintenance wpcontent.zip wordpress.zip
