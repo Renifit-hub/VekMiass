@@ -58,11 +58,13 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          find "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}" -type f -name "*.php" ! -name "wp-config.php" -delete
-          rm -r "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-admin/" "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-includes/"
-          unzip -o "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wordpress.zip" -d "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/"
-          mv "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wordpress"/* "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/"
-          rm -r "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wordpress"
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          find . -maxdepth 1 -type f -name "*.php" ! -name "wp-config.php" -delete
+          rm -rf wp-admin wp-includes
+          unzip -o wordpress.zip
+          mv wordpress/* .
+          rmdir wordpress
+          rm wordpress.zip
 
 
     - name: Update Plugins and Theme
@@ -73,8 +75,10 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          rm -rf "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-content/plugins" "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-content/mu-plugins" "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-content/themes"
-          unzip -o "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wpcontent.zip" -d "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wp-content/"
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          rm -rf wp-content/plugins wp-content/mu-plugins wp-content/themes
+          unzip -o wpcontent.zip -d wp-content/
+          rm wpcontent.zip
 
 
     - name: Disable Maintenance Mode and Remove zips
@@ -85,6 +89,5 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          rm -f "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/.maintenance"
-          rm -f "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wpcontent.zip"
-          rm -f "${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}/wordpress.zip"
+          cd ${{ github.event_name == 'push' && '~/wordpress_6y9dw/public_html' || '~/wordpress_4rgth/public_html' }}
+          rm -f .maintenance wpcontent.zip wordpress.zip
